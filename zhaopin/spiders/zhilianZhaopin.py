@@ -1,3 +1,20 @@
+# -*- coding: utf-8 -*-
+import scrapy
 from scrapy.linkextractors import LinkExtractor
-#添加去重
-from scrapy.dupefilters import RFPDupeFilter
+from scrapy.spiders import CrawlSpider,Rule
+from zhaopin.items import ZhaopinItem
+
+class ZhilianzhaopinSpider(CrawlSpider):
+    name = "zhilianZhaopin"
+    allowed_domains = ["zhaopin.com"]
+    start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
+    rules = (Rule(LinkExtractor(),callback='afterProcess',),)
+
+
+    def afterProcess(self,response):
+        #print("hello world!!")
+        title = response.xpath("//title/text()").extract()[0]
+
+        print(title)
+    #def parse(self, response):
+    #    pass
