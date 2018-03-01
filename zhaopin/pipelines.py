@@ -8,19 +8,24 @@ from datetime import datetime
 import json
 
 class ZhaopinPipeline(object):
-    def process_item(self, item, spider):
 
-        with open('jobs.json','a') as file1:
-            content = json.dumps(dict(item),) + "\n"
-            file1.write(content)
-        #print(type(item))
+	def __init__(self):
+		self.content = []
 
-        return item
+	def process_item(self, item, spider):
+		self.content.append(dict(item))
+		return item
+
+	def close_spider(self,spider):
+		with open('jobs1.json','w') as file2:
+			file2.write(json.dumps(self.content,indent=4))
+		print('hello world!')
+
 
 class ExamplePipeline(object):
-    def process_item(self, item, spider):
-        #utcnow() 是获取UTC时间
-        item["crawled"] = datetime.utcnow()
-        # 爬虫名
-        item["spider"] = spider.name
-        return item
+	def process_item(self, item, spider):
+		#utcnow() 是获取UTC时间
+		item["crawled"] = datetime.utcnow()
+		# 爬虫名
+		item["spider"] = spider.name
+		return item
