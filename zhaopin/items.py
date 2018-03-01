@@ -15,9 +15,26 @@ class ZhaopinItem(Item):
     #pass
     title = Field()
     url = Field()
+    #1职位要求
     jobName = Field()
+    #2公司名
     company = Field()
+    #3工作地点
+    location = Field()
+    #4学历要求
+    backGroup = Field()
+    #5薪资
     salary = Field()
+    #6公司规模
+    scale = Field()
+    #7任职要求
+    require = Field()
+    #8任职经验
+    experience = Field()
+    #9企业性质
+    enterprise = Field()
+
+
     crawled = Field()
     spider = Field()
     #salary = Field()

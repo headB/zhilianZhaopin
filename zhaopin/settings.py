@@ -44,6 +44,15 @@ ROBOTSTXT_OBEY = True
 #   'Accept-Language': 'en',
 #}
 
+# 覆盖默认请求头，可以自己编写Downloader Middlewares设置代理和UserAgent
+DEFAULT_REQUEST_HEADERS = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Accept-Language': 'zh-CN,zh;q=0.8',
+    'Connection': 'keep-alive',
+    'Accept-Encoding': 'gzip, deflate, sdch'
+}
+
+
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
