@@ -13,12 +13,25 @@ class ZhilianzhaopinSpider(CrawlSpider):
 	start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
 	rules = (
 		Rule(LinkExtractor(),callback='afterProcess',),
-		Rule(LinkExtractor(),callback='processingThisPage',),
+		Rule(LinkExtractor(allow=('https://sou.zhaopin.com/jobs/searchresult.ashx')),callback='processingThisPage',),
 
 			 )
 
-	def processingThisPage(self):
-		pass
+	def processingThisPage(self,response):
+		tables = response.xpath('//div[@id="newlist_list_content_table"]/table')
+
+		item = []
+		items = ZhaopinItem()
+
+		for x in tables:
+			x1 = x.xpath(".//tr[1]/td[1]/div/a[1]/text()")
+			items['jobName'] = ''.join(x1)
+
+			x1 = x.xpath(".//tr[1]/td[3]//text()")
+			items['company'] = ''.join(x1)
+
+			x1 = x.xpath(".//tr[1]/td[4]//text()")
+			items['salary'] = ''.join(x1)
 
 	def afterProcess(self,response):
 		title = response.xpath("//title/text()").extract()[0]
