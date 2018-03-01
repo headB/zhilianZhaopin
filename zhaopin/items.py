@@ -14,8 +14,11 @@ class ZhaopinItem(Item):
     # name = scrapy.Field()
     #pass
     title = Field()
+    url = Field()
     jobName = Field()
     company = Field()
     salary = Field()
+    crawled = Field()
+    spider = Field()
     #salary = Field()
 

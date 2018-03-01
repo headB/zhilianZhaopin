@@ -13,6 +13,8 @@ class ZhaopinPipeline(object):
 		self.content = []
 
 	def process_item(self, item, spider):
+		item["crawled"] = datetime.utcnow()
+		item["spider"] = spider.name
 		self.content.append(dict(item))
 		return item
 
