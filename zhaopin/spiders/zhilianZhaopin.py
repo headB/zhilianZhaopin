@@ -11,7 +11,11 @@ class ZhilianzhaopinSpider(CrawlSpider):
 	name = "zhilianZhaopin"
 	allowed_domains = ["zhaopin.com"]
 	start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
-	rules = (Rule(LinkExtractor(),callback='afterProcess',),)
+	rules = (
+		Rule(LinkExtractor(),callback='afterProcess',),
+		Rule(LinkExtractor(),callback='processingThisPage',),
+
+			 )
 
 	def processingThisPage(self):
 		pass

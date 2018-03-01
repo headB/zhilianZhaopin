@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="6c760288-f747-43e2-9ad1-87d48e6450f9" name="11" url="http://kumanxuan1.f3322.net">
+        <fileTransfer host="kumanxuan1.f3322.net" port="225" rootFolder="/home/kumanxuan" accessType="SFTP" password="dfc1dfdfdfc7dfcbdfc4dfd2dfdfdfcbdfc4df9bdf98df99" username="kumanxuan">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
