@@ -12,26 +12,34 @@ class ZhilianzhaopinSpider(CrawlSpider):
 	allowed_domains = ["zhaopin.com"]
 	start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
 	rules = (
-		Rule(LinkExtractor(),callback='afterProcess',),
-		Rule(LinkExtractor(allow=('https://sou.zhaopin.com/jobs/searchresult.ashx')),callback='processingThisPage',),
+		Rule(LinkExtractor(allow=('p=2')),callback='processingThisPage',follow=True),
+		#Rule(LinkExtractor(allow=('https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='processingThisPage',follow=True),
 
 			 )
 
 	def processingThisPage(self,response):
+		print(response.xpath("//title/text()"))
 		tables = response.xpath('//div[@id="newlist_list_content_table"]/table')
+		#table1 = response.xpath('//div[@id="newlist_list_content_table"]')
 
+
+		#for x in tables:
+		#	print(x.xpath("string(.)"))
 		item = []
-		items = ZhaopinItem()
-
+		#return True
 		for x in tables:
-			x1 = x.xpath(".//tr[1]/td[1]/div/a[1]/text()")
+			items = ZhaopinItem()
+			x1 = x.xpath(".//tr[1]/td[1]/div/a[1]/text()").extract()
 			items['jobName'] = ''.join(x1)
 
-			x1 = x.xpath(".//tr[1]/td[3]//text()")
+			x1 = x.xpath(".//tr[1]/td[3]//text()").extract()
 			items['company'] = ''.join(x1)
 
-			x1 = x.xpath(".//tr[1]/td[4]//text()")
+			x1 = x.xpath(".//tr[1]/td[4]//text()").extract()
 			items['salary'] = ''.join(x1)
+
+			yield items
+
 
 	def afterProcess(self,response):
 		title = response.xpath("//title/text()").extract()[0]
@@ -62,7 +70,7 @@ class ZhilianzhaopinSpider(CrawlSpider):
 		yield items
 	#def parse(self, response):
 		#pass
-	def getJobName(self):
+	def getJobName(self,response):
 		pass
 
 
