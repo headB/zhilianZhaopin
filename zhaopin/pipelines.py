@@ -16,14 +16,14 @@ class ZhaopinPipeline(object):
 	def process_item(self, item, spider):
 		item["crawled"] = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime())
 		item["spider"] = spider.name
-		self.content.append(dict(item))
-		print(item)
+		#self.content.append(dict(item))
+		#print(item)
 		return item
 
-	def close_spider(self,spider):
-		with open('jobs1.json','w') as file2:
-			file2.write(json.dumps(self.content,indent=4))
-		#print('hello world!')
+	#def close_spider(self,spider):
+	#	with open('jobs1.json','w') as file2:
+	#		file2.write(json.dumps(self.content,indent=4))
+	#	#print('hello world!')
 
 
 class ExamplePipeline(object):
