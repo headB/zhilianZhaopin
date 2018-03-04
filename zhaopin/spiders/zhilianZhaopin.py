@@ -26,23 +26,40 @@ class ZhilianzhaopinSpider(CrawlSpider):
 		print(response.url)
 		print(response.xpath("//title/text()"))
 		tables = response.xpath('//div[@id="newlist_list_content_table"]/table')
-		#table1 = response.xpath('//div[@id="newlist_list_content_table"]')
 
 
-		#for x in tables:
-		#	print(x.xpath("string(.)"))
-		item = []
-		#return True
 		for x in tables:
 			items = ZhaopinItem()
+
+			#职位名称
 			x1 = x.xpath(".//tr[1]/td[1]/div/a[1]//text()").extract()
 			items['jobName'] = ''.join(x1)
-
+			#公司名字
 			x1 = x.xpath(".//tr[1]/td[3]//text()").extract()
 			items['company'] = ''.join(x1)
-
+			#工资待遇
 			x1 = x.xpath(".//tr[1]/td[4]//text()").extract()
 			items['salary'] = ''.join(x1)
+			#工作地点
+			x1 = x.xpath(".//tr[1]/td[5]//text()").extract()
+			items['location'] = ''.join(x1)
+			#企业性质
+			x1 = x.xpath(".//tr[2]/td/div/div/ul/li[1]/span[2]//text()").extract()
+			items['enterprise'] = ''.join(x1)
+			#公司规模
+			x1 = x.xpath(".//tr[2]/td/div/div/ul/li[1]/span[3]//text()").extract()
+			items['scale'] = ''.join(x1)
+			#需要的工作经验
+			x1 = x.xpath(".//tr[2]/td/div/div/ul/li[1]/span[4]//text()").extract()
+			items['experience'] = ''.join(x1)
+			#学历需求
+			x1 = x.xpath(".//tr[2]/td/div/div/ul/li[1]/span[5]//text()").extract()
+			items['backGroup'] = ''.join(x1)
+			#具体职业要求
+			x1 = x.xpath(".//tr[2]/td/div/div/ul/li[2]//text()").extract()
+			items['require'] = ''.join(x1)
+
+			#相信这里还需要一个函数来处理收集详细的职业要求和公司工作环境需求.!!#公司介绍
 
 			yield items
 
