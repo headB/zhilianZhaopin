@@ -27,6 +27,7 @@ class ZhilianzhaopinSpider(CrawlSpider):
 		print(response.xpath("//title/text()"))
 		tables = response.xpath('//div[@id="newlist_list_content_table"]/table')
 
+		##看看能不能设置一个优先设置,去删除某些元素.看看.!!
 
 		for x in tables:
 			items = ZhaopinItem()
@@ -59,10 +60,24 @@ class ZhilianzhaopinSpider(CrawlSpider):
 			x1 = x.xpath(".//tr[2]/td/div/div/ul/li[2]//text()").extract()
 			items['require'] = ''.join(x1)
 
+
 			#相信这里还需要一个函数来处理收集详细的职业要求和公司工作环境需求.!!#公司介绍
+
+			##测试一下scrapy的request先.
+			detailUrl = x.xpath(".//tr[1]/td[1]/div/a[1]/@href")
+			print(detailUrl)
+			print(type(detailUrl))
+			x1 = scrapy.Request(detailUrl,callback='loadDetailPage')
+			print(x1)
+
 
 			yield items
 
+
+	def loadDetailPage(self,response):
+		x1 = response.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]/text()")
+		x2 = ''.join(x1)
+		return x2
 
 	def afterProcess(self,response):
 		title = response.xpath("//title/text()").extract()[0]

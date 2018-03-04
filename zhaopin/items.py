@@ -34,6 +34,8 @@ class ZhaopinItem(Item):
     #9企业性质
     enterprise = Field()
 
+    #10关于这个职位的详情页.!!
+    detail = Field()
 
     crawled = Field()
     spider = Field()
