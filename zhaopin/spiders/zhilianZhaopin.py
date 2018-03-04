@@ -67,6 +67,10 @@ class ZhilianzhaopinSpider(CrawlSpider):
 			detailUrl = x.xpath(".//tr[1]/td[1]/div/a[1]/@href")
 			print(detailUrl)
 			print(type(detailUrl))
+
+			if not detailUrl:
+				continue
+
 			x1 = scrapy.Request(detailUrl,callback='loadDetailPage')
 			print(x1)
 
