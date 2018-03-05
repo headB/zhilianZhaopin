@@ -23,7 +23,7 @@ class ZhilianzhaopinSpider(CrawlSpider):
 	#start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
 	start_urls = ['http://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=python%E5%BC%80%E5%8F%91&sm=0&isfilter=0&fl=548&isadv=0&sg=6683e2122ef4478198b0d32cf0198102&p=1']
 	rules = (
-		Rule(LinkExtractor(allow=(r'jl=%E5%B9%BF%E4%B8%9C&kw=python%E5%BC%80%E5%8F%91&sm=0&isfilter=0&fl=548&isadv=0&sg=6683e2122ef4478198b0d32cf0198102&p=\d+')),callback='detectJobDetail',follow=True),##设置多页匹配的url.!
+		Rule(LinkExtractor(allow=(r'6683e2122ef4478198b0d32cf0198102&p=\d+')),callback='detectJobDetail',follow=True),##设置多页匹配的url.!
 		#下一页
 		#Rule(LinkExtractor(allow=('')))
 		#Rule(LinkExtractor(allow=('https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='processingThisPage',follow=True),
