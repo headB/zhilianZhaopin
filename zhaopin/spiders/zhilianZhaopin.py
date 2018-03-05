@@ -20,9 +20,12 @@ class ZhilianzhaopinSpider(CrawlSpider):
 
 	name = "zhilianZhaopin"
 	allowed_domains = ["zhaopin.com"]
-	start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
+	#start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
+	start_urls = ['http://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=python%E5%BC%80%E5%8F%91&sm=0&isfilter=0&fl=548&isadv=0&sg=6683e2122ef4478198b0d32cf0198102&p=1']
 	rules = (
-		Rule(LinkExtractor(allow=('kw=java&sm=0&p=1')),callback='detectJobDetail',),
+		Rule(LinkExtractor(allow=(r'jl=%E5%B9%BF%E4%B8%9C&kw=python%E5%BC%80%E5%8F%91&sm=0&isfilter=0&fl=548&isadv=0&sg=6683e2122ef4478198b0d32cf0198102&p=\d+')),callback='detectJobDetail',follow=True),##设置多页匹配的url.!
+		#下一页
+		#Rule(LinkExtractor(allow=('')))
 		#Rule(LinkExtractor(allow=('https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='processingThisPage',follow=True),
 
 				 )
@@ -44,7 +47,7 @@ class ZhilianzhaopinSpider(CrawlSpider):
 		#
 
 
-	##这个函数就用于解析获取到每一页里面所有的职位详情的URL(每一月估计都有60个职位)
+	##这个函数就用于解析获取到每一页里面所有的职位详情的URL(每一页估计都有60个职位)
 	def processJobDetail(self,response):
 		items = ZhaopinItem()
 		x = response.xpath("/html/body/div[6]/div[1]")
