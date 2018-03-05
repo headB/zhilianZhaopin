@@ -27,7 +27,7 @@ class ZhilianzhaopinSpider(CrawlSpider):
 
 				 )
 
-
+		##首先上面匹配到入口网址或者下一页之后,回调下面这个函数
 	def detectJobDetail(self,response):
 		print(response.xpath("//title"))
 		tables = response.xpath('//div[@id="newlist_list_content_table"]/table')
@@ -39,6 +39,12 @@ class ZhilianzhaopinSpider(CrawlSpider):
 				yield scrapy.Request(detailUrl[0],callback=self.processJobDetail)
 
 
+
+
+		#
+
+
+	##这个函数就用于解析获取到每一页里面所有的职位详情的URL(每一月估计都有60个职位)
 	def processJobDetail(self,response):
 		items = ZhaopinItem()
 		x = response.xpath("/html/body/div[6]/div[1]")
@@ -133,60 +139,59 @@ class ZhilianzhaopinSpider(CrawlSpider):
 			#print(self.tracer)
 			yield items
 
-	def manualGetHtml(self,url):
-		htmlRespnse = requests.get(url)
-		htmlFormat = etree.HTML(htmlRespnse.content)
-		x1 = htmlFormat.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]//text()")
-		x2 = ''.join(x1)
-		x2 = x2.replace(' ', '')
-		x2 = x2.replace('\r\n', '')
-		return x2
+	# def manualGetHtml(self,url):
+	# 	htmlRespnse = requests.get(url)
+	# 	htmlFormat = etree.HTML(htmlRespnse.content)
+	# 	x1 = htmlFormat.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]//text()")
+	# 	x2 = ''.join(x1)
+	# 	x2 = x2.replace(' ', '')
+	# 	x2 = x2.replace('\r\n', '')
+	# 	return x2
+    #
+    #
+	# def loadDetailPage(self,response):
+    #
+	# 	x1 = response.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]//text()").extract()
+	# 	x2 = ''.join(x1)
+	# 	x2 = x2.replace(' ','')
+	# 	x2 = x2.replace('\r\n','')
+	# 	#global tracer
+    #
+	# 	returnItem = ZhaopinItem()
+    #
+	# 	returnItem['title'] = x2
+	# 	yield returnItem
+	# 	#targetInfo = x2
+    #
+	# def afterProcess(self,response):
+	# 	title = response.xpath("//title/text()").extract()[0]
+	# 	items = ZhaopinItem()
+	# 	items['title'] = title
+	# 	items['url'] = response.url
+    #
+	# 	items['title'] = title
+	# 	# 1职位要求
+	# 	items['jobName'] = title
+	# 	# 2公司名
+	# 	items['company'] = title
+	# 	# 3工作地点
+	# 	items['location'] = title
+	# 	# 4学历要求
+	# 	items['backGroup'] = title
+	# 	# 5薪资
+	# 	items['salary'] = title
+	# 	# 6公司规模
+	# 	items['scale'] = title
+	# 	# 7任职要求
+	# 	items['require'] = title
+	# 	# 8任职经验
+	# 	items['experience'] = title
+	# 	# 9企业性质
+	# 	items['enterprise'] = title
+    #
+	# 	yield items
+	# #def parse(self, response):
+	# 	#pass
 
-
-	def loadDetailPage(self,response):
-
-		x1 = response.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]//text()").extract()
-		x2 = ''.join(x1)
-		x2 = x2.replace(' ','')
-		x2 = x2.replace('\r\n','')
-		#global tracer
-
-		returnItem = ZhaopinItem()
-
-		returnItem['title'] = x2
-		yield returnItem
-		#targetInfo = x2
-
-	def afterProcess(self,response):
-		title = response.xpath("//title/text()").extract()[0]
-		items = ZhaopinItem()
-		items['title'] = title
-		items['url'] = response.url
-
-		items['title'] = title
-		# 1职位要求
-		items['jobName'] = title
-		# 2公司名
-		items['company'] = title
-		# 3工作地点
-		items['location'] = title
-		# 4学历要求
-		items['backGroup'] = title
-		# 5薪资
-		items['salary'] = title
-		# 6公司规模
-		items['scale'] = title
-		# 7任职要求
-		items['require'] = title
-		# 8任职经验
-		items['experience'] = title
-		# 9企业性质
-		items['enterprise'] = title
-
-		yield items
-	#def parse(self, response):
-		#pass
-	def getJobName(self,response):
-		pass
 
 
