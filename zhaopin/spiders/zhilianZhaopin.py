@@ -22,10 +22,62 @@ class ZhilianzhaopinSpider(CrawlSpider):
 	allowed_domains = ["zhaopin.com"]
 	start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
 	rules = (
-		Rule(LinkExtractor(allow=('kw=java&sm=0&p=1')),callback='processingThisPage',),
+		Rule(LinkExtractor(allow=('kw=java&sm=0&p=1')),callback='detectJobDetail',),
 		#Rule(LinkExtractor(allow=('https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='processingThisPage',follow=True),
 
 				 )
+
+
+	def detectJobDetail(self,response):
+		print(response.xpath("//title"))
+		tables = response.xpath('//div[@id="newlist_list_content_table"]/table')
+		print(len(tables))
+		for x in tables:
+			detailUrl = x.xpath(".//tr[1]/td[1]/div/a[1]/@href").extract()
+			if detailUrl:
+				print(detailUrl[0])
+				yield scrapy.Request(detailUrl[0],callback=self.processJobDetail)
+
+
+	def processJobDetail(self,response):
+		items = ZhaopinItem()
+		x = response.xpath("/html/body/div[6]/div[1]")
+		# 职位名称
+		x1 = x.xpath("/html/body/div[5]/div[1]/div[1]/h1//text()").extract()
+		items['jobName'] = ''.join(x1)
+		# 公司名字
+		x1 = x.xpath("/html/body/div[5]/div[1]/div[1]/h2//text()").extract()
+		items['company'] = ''.join(x1)
+		# 工资待遇
+		x1 = x.xpath("ul/li[1]//text()").extract()
+		items['salary'] = ''.join(x1)
+		# 工作地点
+		x1 = x.xpath("ul/li[2]//text()").extract()
+		items['location'] = ''.join(x1)
+		# 企业性质
+		x1 = x.xpath("/html/body/div[6]/div[2]/div[1]/ul/li[2]//text()").extract()
+		items['enterprise'] = ''.join(x1)
+		# 公司规模
+		x1 = x.xpath("/html/body/div[6]/div[2]/div[1]/ul/li[1]//text()").extract()
+		items['scale'] = ''.join(x1)
+		# 需要的工作经验
+		x1 = x.xpath("ul/li[5]//text()").extract()
+		items['experience'] = ''.join(x1)
+		# 学历需求
+		x1 = x.xpath("ul/li[6]//text()").extract()
+		items['backGroup'] = ''.join(x1)
+		# 具体职业要求
+		#x1 = x.xpath("ul/li[1]//text()").extract()
+		#items['require'] = ''.join(x1)
+
+		x1 = x.xpath("/html/body/div[6]/div[1]/div[1]/div//text()").extract()
+		x2 = ''.join(x1)
+		x2 = x2.replace(' ','')
+		x2 = x2.replace('\r\n','')
+		items['detail'] = x2
+
+		yield items
+
 
 	def processingThisPage(self,response):
 		print(response.url)
