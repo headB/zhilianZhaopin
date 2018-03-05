@@ -20,7 +20,7 @@ class ZhilianzhaopinSpider(CrawlSpider):
 		Rule(LinkExtractor(allow=('kw=java&sm=0&p=1')),callback='processingThisPage',),
 		#Rule(LinkExtractor(allow=('https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='processingThisPage',follow=True),
 
-			 )
+				 )
 
 	def processingThisPage(self,response):
 		print(response.url)
@@ -64,15 +64,16 @@ class ZhilianzhaopinSpider(CrawlSpider):
 			#相信这里还需要一个函数来处理收集详细的职业要求和公司工作环境需求.!!#公司介绍
 
 			##测试一下scrapy的request先.
-			detailUrl = x.xpath(".//tr[1]/td[1]/div/a[1]/@href")
-			print(detailUrl)
-			print(type(detailUrl))
+			detailUrl = x.xpath(".//tr[1]/td[1]/div/a[1]/@href").extract()
 
 			if not detailUrl:
 				continue
 
-			x1 = scrapy.Request(detailUrl,callback='loadDetailPage')
-			print(x1)
+			print(detailUrl[0])
+			yield  scrapy.Request(detailUrl[0],callback=self.processingThisPage)
+			#print(x1)
+			#print(dir(x1))
+			#print(x1.body)
 
 
 			yield items
@@ -81,7 +82,7 @@ class ZhilianzhaopinSpider(CrawlSpider):
 	def loadDetailPage(self,response):
 		x1 = response.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]/text()")
 		x2 = ''.join(x1)
-		return x2
+		return
 
 	def afterProcess(self,response):
 		title = response.xpath("//title/text()").extract()[0]
