@@ -13,6 +13,8 @@ from scrapy.dupefilters import RFPDupeFilter
 ##尝试一下直接改装.!!redisCrawlSpider
 ##不不,是尝试一下用scrapy_redis的普通crawlSpider,据说有分布式功能.!!
 class ZhilianzhaopinSpider(CrawlSpider):
+
+
 	name = "zhilianZhaopin"
 	allowed_domains = ["zhaopin.com"]
 	start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
@@ -70,19 +72,26 @@ class ZhilianzhaopinSpider(CrawlSpider):
 				continue
 
 			print(detailUrl[0])
-			yield  scrapy.Request(detailUrl[0],callback=self.processingThisPage)
-			#print(x1)
-			#print(dir(x1))
-			#print(x1.body)
 
+			yield  scrapy.Request(detailUrl[0],callback=self.loadDetailPage)
 
+			#print(self.tracer)
 			yield items
 
 
 	def loadDetailPage(self,response):
-		x1 = response.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]/text()")
+
+		x1 = response.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]//text()").extract()
 		x2 = ''.join(x1)
-		return
+		x2 = x2.replace(' ','')
+		x2 = x2.replace('\r\n','')
+		#global tracer
+
+		returnItem = ZhaopinItem()
+
+		returnItem['title'] = x2
+		return returnItem
+		#targetInfo = x2
 
 	def afterProcess(self,response):
 		title = response.xpath("//title/text()").extract()[0]
