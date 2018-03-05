@@ -37,6 +37,8 @@ class ZhaopinItem(Item):
     #10关于这个职位的详情页.!!
     detail = Field()
 
+    linkUrl = Field()
+
     crawled = Field()
     spider = Field()
     #salary = Field()

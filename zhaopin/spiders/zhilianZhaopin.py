@@ -4,6 +4,9 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider,Rule
 from zhaopin.items import ZhaopinItem
 from scrapy_redis.spiders import CrawlSpider
+import requests
+from lxml import etree
+
 #from scrapy_redis.spiders import RedisCrawlSpider
 
 ##添加去重!!
@@ -71,12 +74,21 @@ class ZhilianzhaopinSpider(CrawlSpider):
 			if not detailUrl:
 				continue
 
-			print(detailUrl[0])
-
 			yield  scrapy.Request(detailUrl[0],callback=self.loadDetailPage)
+			#items['detail'] = self.manualGetHtml(detailUrl[0])
+
 
 			#print(self.tracer)
 			yield items
+
+	def manualGetHtml(self,url):
+		htmlRespnse = requests.get(url)
+		htmlFormat = etree.HTML(htmlRespnse.content)
+		x1 = htmlFormat.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]//text()")
+		x2 = ''.join(x1)
+		x2 = x2.replace(' ', '')
+		x2 = x2.replace('\r\n', '')
+		return x2
 
 
 	def loadDetailPage(self,response):
@@ -90,7 +102,7 @@ class ZhilianzhaopinSpider(CrawlSpider):
 		returnItem = ZhaopinItem()
 
 		returnItem['title'] = x2
-		return returnItem
+		yield returnItem
 		#targetInfo = x2
 
 	def afterProcess(self,response):
