@@ -190,32 +190,3 @@ class ZhilianzhaopinSpider(CrawlSpider):
 		pass
 
 
-	def getCompany(self):
-		pass
-
-
-	def getLocation(self):
-		pass
-
-	def getBackGroup(self):
-		pass
-
-
-	def getSalary(self):
-		pass
-
-
-	def getScale(self):
-		pass
-
-	def getRequire(self):
-		pass
-
-
-	def getExperience(self):
-		pass
-
-
-	def getEnterprise(self):
-		pass
-
