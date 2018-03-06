@@ -102,3 +102,15 @@ SCHEDULER_PERSIST = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+
+ipPool = [
+    {"ipaddr":'219.135.164.245:3128'},
+    {"ipaddr":'114.215.95.188:3128'},
+    {"ipaddr":'39.137.37.8:80'},
+    {"ipaddr":'130.88.101.29:3128'},
+    {"ipaddr":'120.92.88.202:10000'},
+    {"ipaddr":'120.77.254.116:3128'},
+    {"ipaddr":'139.224.80.139:3128'},
+    {"ipaddr":'120.55.66.99:7777'},
+]
