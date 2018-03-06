@@ -37,6 +37,7 @@ class ZhaopinItem(Item):
     #10关于这个职位的详情页.!!
     detail = Field()
 
+    #该页面的原始网页url地址.
     linkUrl = Field()
 
     crawled = Field()

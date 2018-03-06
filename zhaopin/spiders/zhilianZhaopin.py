@@ -20,15 +20,15 @@ class ZhilianzhaopinSpider(CrawlSpider):
 
 	name = "zhilianZhaopin"
 	allowed_domains = ["zhaopin.com"]
-	#start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
-	start_urls = ['http://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=python%E5%BC%80%E5%8F%91&sm=0&isfilter=0&fl=548&isadv=0&sg=6683e2122ef4478198b0d32cf0198102&p=1']
+	start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
+	#start_urls = ['http://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=python%E5%BC%80%E5%8F%91&sm=0&isfilter=0&fl=548&isadv=0&sg=6683e2122ef4478198b0d32cf0198102&p=1']
 	rules = (
-		Rule(LinkExtractor(allow=(r'jl=%E5%B9%BF%E4%B8%9C&kw=python%E5%BC%80%E5%8F%91&sm=0&isfilter=0&fl=548&isadv=0&sg=6683e2122ef4478198b0d32cf0198102&p=\d+')),callback='detectJobDetail',follow=True),##设置多页匹配的url.!
-		#下一页
-		#Rule(LinkExtractor(allow=('')))
-		#Rule(LinkExtractor(allow=('https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='processingThisPage',follow=True),
+		#Rule(LinkExtractor(allow=(r'jl=%E5%B9%BF%E4%B8%9C&kw=python%E5%BC%80%E5%8F%91&sm=0&isfilter=0&fl=548&isadv=0&sg=6683e2122ef4478198b0d32cf0198102&p=\d+')),callback='detectJobDetail',follow=True),##设置多页匹配的url.!
 
-				 )
+		Rule(LinkExtractor(allow=(r'https://sou\.zhaopin\.com/jobs/searchresult\.ashx\?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='detectJobDetail'),
+		##下面这个匹配所有的下一页或者具体的数字页面
+		Rule(LinkExtractor(allow=(r'ashx\?jl=%e5%b9%bf%e4%b8%9c&kw=java&sm=0&sg=.+&p=\d+')),callback='detectJobDetail',follow=True),
+	)
 
 		##首先上面匹配到入口网址或者下一页之后,回调下面这个函数
 	def detectJobDetail(self,response):
@@ -194,6 +194,4 @@ class ZhilianzhaopinSpider(CrawlSpider):
 	# 	yield items
 	# #def parse(self, response):
 	# 	#pass
-
-
 
