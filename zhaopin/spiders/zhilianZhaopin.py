@@ -23,7 +23,7 @@ class ZhilianzhaopinSpider(CrawlSpider):
 	#start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
 	start_urls = ['http://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=python%E5%BC%80%E5%8F%91&sm=0&isfilter=0&fl=548&isadv=0&sg=6683e2122ef4478198b0d32cf0198102&p=1']
 	rules = (
-		Rule(LinkExtractor(allow=(r'6683e2122ef4478198b0d32cf0198102&p=\d+')),callback='detectJobDetail',follow=True),##设置多页匹配的url.!
+		Rule(LinkExtractor(allow=(r'jl=%E5%B9%BF%E4%B8%9C&kw=python%E5%BC%80%E5%8F%91&sm=0&isfilter=0&fl=548&isadv=0&sg=6683e2122ef4478198b0d32cf0198102&p=\d+')),callback='detectJobDetail',follow=True),##设置多页匹配的url.!
 		#下一页
 		#Rule(LinkExtractor(allow=('')))
 		#Rule(LinkExtractor(allow=('https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='processingThisPage',follow=True),
@@ -41,10 +41,6 @@ class ZhilianzhaopinSpider(CrawlSpider):
 				print(detailUrl[0])
 				yield scrapy.Request(detailUrl[0],callback=self.processJobDetail)
 
-
-
-
-		#
 
 
 	##这个函数就用于解析获取到每一页里面所有的职位详情的URL(每一页估计都有60个职位)
@@ -79,11 +75,14 @@ class ZhilianzhaopinSpider(CrawlSpider):
 		#x1 = x.xpath("ul/li[1]//text()").extract()
 		#items['require'] = ''.join(x1)
 
-		x1 = x.xpath("/html/body/div[6]/div[1]/div[1]/div//text()").extract()
+		x1 = x.xpath("/html/body/div[6]/div[1]/div[1]/div/div[1]//text()").extract()
 		x2 = ''.join(x1)
 		x2 = x2.replace(' ','')
 		x2 = x2.replace('\r\n','')
 		items['detail'] = x2
+
+		##该页具体的原始url地址
+		items['linkUrl'] = response.url
 
 		yield items
 
