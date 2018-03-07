@@ -64,7 +64,7 @@ DEFAULT_REQUEST_HEADERS = {
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     #'zhaopin.middlewares.MyCustomDownloaderMiddleware': 543,
-    'zhaopin.middlewares.randomProxy':100,
+    #'zhaopin.middlewares.randomProxy':100,
     'zhaopin.middlewares.randomUserAgent':1,
 
 }
