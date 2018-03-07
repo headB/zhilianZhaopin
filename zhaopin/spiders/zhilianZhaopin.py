@@ -3,7 +3,8 @@ import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider,Rule
 from zhaopin.items import ZhaopinItem
-from scrapy_redis.spiders import CrawlSpider
+#from scrapy_redis.spiders import CrawlSpider
+from scrapy_redis.spiders import RedisCrawlSpider
 import requests
 from lxml import etree
 
@@ -15,20 +16,22 @@ from scrapy.dupefilters import RFPDupeFilter
 
 ##尝试一下直接改装.!!redisCrawlSpider
 ##不不,是尝试一下用scrapy_redis的普通crawlSpider,据说有分布式功能.!!
-class ZhilianzhaopinSpider(CrawlSpider):
+class ZhilianzhaopinSpider(RedisCrawlSpider):
 
 
 	name = "zhilianZhaopin"
 	allowed_domains = ["zhaopin.com"]
 
-	start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
-
+	#start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
+	redis_key = 'zhaopin:start_urls'
 
 	rules = (
 		Rule(LinkExtractor(allow=(r'https://sou\.zhaopin\.com/jobs/searchresult\.ashx\?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='detectJobDetail'),
 		##下面这个匹配所有的下一页或者具体的数字页面
 		Rule(LinkExtractor(allow=(r'ashx\?jl=%e5%b9%bf%e4%b8%9c&kw=java&sm=0&sg=.+&p=\d+')),callback='detectJobDetail',follow=True),
 	)
+
+
 
 
 		##首先上面匹配到入口网址或者下一页之后,回调下面这个函数
