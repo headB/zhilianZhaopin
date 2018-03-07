@@ -61,9 +61,10 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'zhaopin.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    #'zhaopin.middlewares.MyCustomDownloaderMiddleware': 543,
+    'zhaopin.middlewares.randomProxy':1,
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
@@ -105,12 +106,13 @@ SCHEDULER_PERSIST = True
 
 
 ipPool = [
-    {"ipaddr":'219.135.164.245:3128'},
-    {"ipaddr":'114.215.95.188:3128'},
-    {"ipaddr":'39.137.37.8:80'},
-    {"ipaddr":'130.88.101.29:3128'},
-    {"ipaddr":'120.92.88.202:10000'},
-    {"ipaddr":'120.77.254.116:3128'},
-    {"ipaddr":'139.224.80.139:3128'},
-    {"ipaddr":'120.55.66.99:7777'},
+    #{'ipaddr': '192.168.113.1:9001'},
+    {'ipaddr': '139.224.80.139:3128'} ,
+    {'ipaddr': '159.65.229.1:3128'} ,
+    {'ipaddr': '120.79.229.25:6666'} ,
+    #{'ipaddr': '120.77.254.116:3128'},
+    #{'ipaddr': '120.237.55.23:8888'},
+    #{'ipaddr': '183.57.36.87:8888'},
+    #{'ipaddr': '119.27.177.169:80'},
+
 ]
