@@ -8,6 +8,7 @@
 from scrapy import signals
 import random
 from zhaopin.settings import ipPool
+from zhaopin.settings import USER_AGENTS
 
 class ZhaopinSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -56,9 +57,16 @@ class ZhaopinSpiderMiddleware(object):
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
 
-    ##自己写一个中间件
+
+##自己写一个关于userAgent的中间件.
+class randomUserAgent(object):
+    def process_request(self,request,spider):
+        userAgent = random.choice(USER_AGENTS)
+        request.headers.setdefault("User-Agent",userAgent)
+
+##自己写一个代理的中间件
 class randomProxy(object):
-        def process_request(self,request,spider):
+    def process_request(self,request,spider):
             proxy = random.choice(ipPool)
             request.meta['proxy'] = 'http://' + proxy['ipaddr']
             #request.meta['proxy'] = 'https://' + proxy['ipaddr']
