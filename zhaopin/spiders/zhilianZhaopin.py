@@ -26,9 +26,11 @@ class ZhilianzhaopinSpider(RedisCrawlSpider):
 	redis_key = 'zhaopin:start_urls'
 
 	rules = (
-		Rule(LinkExtractor(allow=(r'https://sou\.zhaopin\.com/jobs/searchresult\.ashx\?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='detectJobDetail'),
+		#处理本页面可以用其他的方式提取的,下面展示另外一种方式
+		Rule(LinkExtractor(restrict_xpaths=(r'//div/table//tr/td/div/a[1]')),callback='processJobDetail',follow=True),
+		#Rule(LinkExtractor(allow=(r'https://sou\.zhaopin\.com/jobs/searchresult\.ashx\?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='detectJobDetail'),
 		##下面这个匹配所有的下一页或者具体的数字页面
-		Rule(LinkExtractor(allow=(r'ashx\?jl=%e5%b9%bf%e4%b8%9c&kw=java&sm=0&sg=.+&p=\d+')),callback='detectJobDetail',follow=True),
+		Rule(LinkExtractor(allow=(r'ashx\?jl=%e5%b9%bf%e4%b8%9c&kw=java&sm=0&sg=.+&p=\d+')),callback='processJobDetail',follow=True),
 	)
 
 
