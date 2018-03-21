@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import scrapy
 from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider,Rule
+from scrapy.spiders import Rule
 from zhaopin.items import ZhaopinItem
-#from scrapy_redis.spiders import CrawlSpider
+from scrapy_redis.spiders import CrawlSpider
 from scrapy_redis.spiders import RedisCrawlSpider
 import requests
 from lxml import etree
@@ -16,21 +16,20 @@ from scrapy.dupefilters import RFPDupeFilter
 
 ##尝试一下直接改装.!!redisCrawlSpider
 ##不不,是尝试一下用scrapy_redis的普通crawlSpider,据说有分布式功能.!!
-class ZhilianzhaopinSpider(RedisCrawlSpider):
+class ZhilianzhaopinSpider(CrawlSpider):
 
 
 	name = "zhilianZhaopin"
 	allowed_domains = ["zhaopin.com"]
 
-	#start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
-	redis_key = 'zhaopin:start_urls'
+	start_urls = ['https://sou.zhaopin.com/jobs/searchresult.ashx?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1']
+	#redis_key = 'zhaopin:start_urls'
 
 	rules = (
 		#处理本页面可以用其他的方式提取的,下面展示另外一种方式
 		Rule(LinkExtractor(restrict_xpaths=(r'//div/table//tr/td/div/a[1]')),callback='processJobDetail',follow=True),
-		#Rule(LinkExtractor(allow=(r'https://sou\.zhaopin\.com/jobs/searchresult\.ashx\?jl=%E5%B9%BF%E4%B8%9C&kw=java&sm=0&p=1')),callback='detectJobDetail'),
 		##下面这个匹配所有的下一页或者具体的数字页面
-		Rule(LinkExtractor(allow=(r'ashx\?jl=%e5%b9%bf%e4%b8%9c&kw=java&sm=0&sg=.+&p=\d+')),callback='processJobDetail',follow=True),
+		Rule(LinkExtractor(allow=(r'ashx\?jl=%e5%b9%bf%e4%b8%9c&kw=java&sm=0&sg=.+&p=\d+')),follow=True),
 	)
 
 
@@ -40,6 +39,8 @@ class ZhilianzhaopinSpider(RedisCrawlSpider):
 	def detectJobDetail(self,response):
 		print(response.xpath("//title"))
 		tables = response.xpath('//div[@id="newlist_list_content_table"]/table')
+		print(len(tables))
+		tables = tables[1:]
 		print(len(tables))
 		for x in tables:
 			detailUrl = x.xpath(".//tr[1]/td[1]/div/a[1]/@href").extract()
@@ -147,57 +148,4 @@ class ZhilianzhaopinSpider(RedisCrawlSpider):
 			#print(self.tracer)
 			yield items
 
-	# def manualGetHtml(self,url):
-	# 	htmlRespnse = requests.get(url)
-	# 	htmlFormat = etree.HTML(htmlRespnse.content)
-	# 	x1 = htmlFormat.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]//text()")
-	# 	x2 = ''.join(x1)
-	# 	x2 = x2.replace(' ', '')
-	# 	x2 = x2.replace('\r\n', '')
-	# 	return x2
-    #
-    #
-	# def loadDetailPage(self,response):
-    #
-	# 	x1 = response.xpath("/html/body/div/div/div/div/div[@class='tab-inner-cont'][1]//text()").extract()
-	# 	x2 = ''.join(x1)
-	# 	x2 = x2.replace(' ','')
-	# 	x2 = x2.replace('\r\n','')
-	# 	#global tracer
-    #
-	# 	returnItem = ZhaopinItem()
-    #
-	# 	returnItem['title'] = x2
-	# 	yield returnItem
-	# 	#targetInfo = x2
-    #
-	# def afterProcess(self,response):
-	# 	title = response.xpath("//title/text()").extract()[0]
-	# 	items = ZhaopinItem()
-	# 	items['title'] = title
-	# 	items['url'] = response.url
-    #
-	# 	items['title'] = title
-	# 	# 1职位要求
-	# 	items['jobName'] = title
-	# 	# 2公司名
-	# 	items['company'] = title
-	# 	# 3工作地点
-	# 	items['location'] = title
-	# 	# 4学历要求
-	# 	items['backGroup'] = title
-	# 	# 5薪资
-	# 	items['salary'] = title
-	# 	# 6公司规模
-	# 	items['scale'] = title
-	# 	# 7任职要求
-	# 	items['require'] = title
-	# 	# 8任职经验
-	# 	items['experience'] = title
-	# 	# 9企业性质
-	# 	items['enterprise'] = title
-    #
-	# 	yield items
-	# #def parse(self, response):
-	# 	#pass
 
